@@ -1,0 +1,41 @@
+{
+    "code": "01",
+    "status": "Success",
+    "message": "Data ditemukanzzz",
+    "data": [
+        {
+            "similarity_score": 100.0,
+            "id_pefindo": 102160861000014,
+            "id_no": "3510166803850002",
+            "tipe_pencarian": "SIMILAR",
+            "nama_debitur": "AGUS SALIM",
+            "tanggal_lahir": "1961-08-16",
+            "npwp": "3510166803850002",
+            "alamat": "DLANGKUP RT 21 RW 07 POJOK 68465 NGANTRU POJAK ID",
+            "nama_gadis_ibu_kandung": "GUNANTI",
+            "tempat_lahir": "KEDIRI",
+            "Jenis Kelamin": "Perempuan",
+            "Kode Kota": "Lainnya Tidak terdefinisi",
+            "kode_pos": "68465",
+            "ketersediaan_data_kredit": "Yes"
+        },
+        {
+            "similarity_score": 100.0,
+            "id_pefindo": 102160861000015,
+            "id_no": "3510166803850002",
+            "tipe_pencarian": "SIMILAR",
+            "nama_debitur": "AGUS SALIM",
+            "tanggal_lahir": "1961-08-16",
+            "npwp": "3510166803850002",
+            "alamat": "DLANGKUP RT 21 RW 07 POJOK 68465 NGANTRU POJAK ID",
+            "nama_gadis_ibu_kandung": "GUNANTI",
+            "tempat_lahir": "KEDIRI",
+            "Jenis Kelamin": "Perempuan",
+            "Kode Kota": "Lainnya Tidak terdefinisi",
+            "kode_pos": "68465",
+            "ketersediaan_data_kredit": "Yes"
+        }
+    ],
+    "inquiry_id": 602464,
+    "response_status": "ALL_CORRECT"
+}
