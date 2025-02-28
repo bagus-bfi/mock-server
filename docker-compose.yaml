@@ -5,7 +5,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "9090:9090"
     environment:
       - ENV_VAR=example
+    networks:
+         - app_sidupak_network
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.bee.rule=Host(`be.adebmbng.com`)
+        - traefik.http.routers.bee.entrypoints=web-secure
+        - traefik.http.routers.bee.tls=true
+        - traefik.http.routers.bee.tls.certresolver=letsencrypt
+        - traefik.http.routers.bee.middlewares=blame-https
+        - traefik.http.services.bee.loadbalancer.server.port=9090
+networks:
+   app_sidupak_network:
+     external: true

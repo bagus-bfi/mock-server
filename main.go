@@ -147,7 +147,7 @@ func main() {
 	})
 
 	log.Println("Server is running at http://localhost:9090")
-	if err := http.ListenAndServe(":9090", nil); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:9090", nil); err != nil {
 		fmt.Println("Error starting server:", err)
 	}
 
