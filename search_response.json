@@ -1,7 +1,7 @@
 {
     "code": "01",
     "status": "Success",
-    "message": "Data ditemukanzzz",
+    "message": "Data ditemukan",
     "data": [
         {
             "similarity_score": 100.0,

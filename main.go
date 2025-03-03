@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -146,6 +148,40 @@ func main() {
 		w.Write([]byte("Log file cleared"))
 	})
 
+	// api update pefindo_ids
+	http.HandleFunc("/updatePefindoIDs", func(w http.ResponseWriter, r *http.Request) {
+		// update pefindo_ids
+		bodyReq, err := io.ReadAll(r.Body)
+		if err != nil {
+			fmt.Println("Error reading body:", err)
+			w.Write([]byte("Error reading body"))
+			return
+		}
+
+		type pefindoIDs struct {
+			PefindoIDs []string `json:"pefindo_ids"`
+		}
+
+		var pIDs pefindoIDs
+		err = json.Unmarshal(bodyReq, &pIDs)
+		if err != nil {
+			fmt.Println("Error unmarshalling:", err)
+			w.Write([]byte("Error unmarshalling"))
+			return
+		}
+
+		// write pefindo_ids to file pefindo_ids.txt
+		newContent := []byte(strings.Join(pIDs.PefindoIDs, ","))
+		if err := os.WriteFile("pefindo_ids.txt", newContent, 0644); err != nil {
+			fmt.Println("Error writing to file:", err)
+			w.Write([]byte("Error writing to file"))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Pefindo IDs updated"))
+	})
+
 	log.Println("Server is running at http://localhost:9090")
 	if err := http.ListenAndServe("0.0.0.0:9090", nil); err != nil {
 		fmt.Println("Error starting server:", err)
@@ -155,23 +191,24 @@ func main() {
 
 func writeLog(r *http.Request) {
 	// write request log to file
-	f, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
+	f, err := os.ReadFile("log.txt")
+	if err != nil && !os.IsNotExist(err) {
+		fmt.Println("Error reading file:", err)
 		return
 	}
-	defer f.Close()
 
-	val := fmt.Sprintf("%s %s %s %s\n", time.Now().Format(time.DateTime), r.Method, r.URL, r.Proto)
+	val := fmt.Sprintf("%s %s %s\n", time.Now().Format(time.DateTime), r.Method, r.URL)
 	// body request
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println("Error reading body:", err)
 		return
 	}
-	val += string(body)
+	val += string(body) + "\n"
 
-	if _, err := f.WriteString(val + "\n"); err != nil {
+	newContent := append([]byte(val), f...)
+
+	if err := os.WriteFile("log.txt", newContent, 0644); err != nil {
 		fmt.Println("Error writing to file:", err)
 	}
 }
@@ -916,9 +953,20 @@ func getReport() string {
 }
 
 func getRoundRobinPefindoIDs() string {
-	pefindoIDs := []string{"102160861000014", "102160861000015"}
+	// read file perindo_ids.txt
+	// split by ,
+	f, err := os.ReadFile("pefindo_ids.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	pefindoIDs := strings.Split(string(f), ",")
+	if len(pefindoIDs) == 0 {
+		return ""
+	}
+
+	// pefindoIDs := []string{"102160861000014", "102160861000015"}
 	idx := 0
-	if counter%2 != 0 {
+	if counter%len(pefindoIDs) != 0 {
 		idx = 1
 	}
 	counter++
