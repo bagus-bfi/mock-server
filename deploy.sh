@@ -1,3 +1,4 @@
 #!/bin/sh
 
-git pull origin main
+git pull
+docker compose up -d --build
