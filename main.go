@@ -79,8 +79,8 @@ func main() {
 			return
 		}
 
-		w.Write([]byte("Search result updated"))
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Search result updated"))
 	})
 
 	// post generate report api
