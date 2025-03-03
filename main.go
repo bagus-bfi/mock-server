@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -180,6 +181,21 @@ func main() {
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Pefindo IDs updated"))
+	})
+
+	// api run script deploy.sh
+	http.HandleFunc("/deploy", func(w http.ResponseWriter, r *http.Request) {
+		// run script deploy.sh
+		cmd := exec.Command("sh", "deploy.sh")
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("Error running script:", err)
+			w.Write([]byte("Error running script"))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Script deploy.sh executed"))
 	})
 
 	log.Println("Server is running at http://localhost:9090")
