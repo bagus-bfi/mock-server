@@ -194,8 +194,17 @@ func main() {
 			return
 		}
 
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Script deploy.sh executed"))
+		// tail system log to response
+		cmd = exec.Command("tail", "/var/log/syslog")
+		out, err := cmd.Output()
+		if err != nil {
+			fmt.Println("Error running tail:", err)
+			w.Write([]byte("Error running tail"))
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write(out)
 	})
 
 	log.Println("Server is running at http://localhost:9090")
